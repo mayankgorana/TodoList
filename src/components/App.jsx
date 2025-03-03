@@ -1,16 +1,24 @@
 import React, {useState} from "react";
 import InputValue from "./InputValue";
+import Todoitem from "./Todoitem";
 
 function App() {
   const [items, setItems] = useState([]);
 
   function addItem(text){
+    if (text.trim() === "") return;
     setItems( (prevValue => {       // Updating the items with the help of objects in which text value we are storing 
       return [...prevValue, text];
     }));
-
-    // Value after submitting will be empty
   }
+
+  function deleteItem(id){
+    setItems( (prevItems => {
+      return prevItems.filter( (items, index) => {
+        return index !== id;
+      });
+    }));
+  } 
 
   return (
     <div className="container">
@@ -21,9 +29,14 @@ function App() {
       <InputValue OnAdd={addItem} />
       <div>
         <ul>
-          {items.map((item) => {
-            return <li>{item}</li>
-          })}
+          {items.map((toItem, index) => (
+            <Todoitem 
+              key = {index}
+              id = {index}
+              text = {toItem}
+              onChecked = {deleteItem}
+            />
+          ))}
         </ul>
       </div>
     </div>
